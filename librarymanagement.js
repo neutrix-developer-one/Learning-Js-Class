@@ -31,6 +31,9 @@
 
 
 
+
+
+
   class Library {
     constructor(){
         this.books = [];
@@ -68,6 +71,62 @@ library.addBook(new Book("1984", "George Orwell", "978-0-452-28423-4"));
 library.addBook(new Book("To Kill a Mockingbird", "Harper Lee", "978-0-06-112008-4"));
 console.log("All Books:",library.listAllBooks().map((book) => book.getInfo()));
 console.log("Library Stats:", Library.getLibraryStats(library));
+
+
+
+
+
+class Member {
+    constructor(name, memberId){
+        this.name = name; 
+        this.memberId = memberId;
+        this.borrowedBooks = [];
+    }
+    
+    borrowBook(library, isbn) {
+        const book = library.findBook(isbn);
+        if(book && this.borrowedBooks.length < 3) {
+            this.borrowedBooks.push(book);
+            library.removeBook(isbn);
+            return true;
+        }
+        return false;
+    }
+    
+    returnBook(library,isbn) {
+        const bookIndex = this.borrowedBooks.findIndex((book) => book.isbn === isbn);
+        if(bookIndex !== -1){
+            const book = this.borrowedBooks[bookIndex];
+            this.borrowedBooks.splice(bookIndex,1);
+            library.addBook(book);
+            return true;
+        }
+        return false;
+    }
+    getBorrowedBooks(){
+        return this.borrowedBooks;
+    }
+}
+
+
+
+
+console.log("\n=== Testing Member Class ===");
+const member = new Member("John Doe", "M001");
+console.log("Borrowing book...");
+const borrowed = member.borrowBook(library, "978-0-7432-7356-5");
+console.log("Borrowed successfully:", borrowed);
+console.log(
+  "Member's borrowed books:",
+  member.getBorrowedBooks().map((book) => book.getInfo())
+);
+console.log(
+  "Books in library:",
+  library.listAllBooks().map((book) => book.getInfo())
+);
+
+
+
 
 
 
