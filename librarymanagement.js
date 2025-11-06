@@ -19,7 +19,7 @@
   "978-0-7432-7356-5"
 );
 
-  ("Book Info:", book1.getInfo());
+  console.log("Book Info:", book1.getInfo());
   console.log("Is Available:", book1.isAvailable);
 
 
