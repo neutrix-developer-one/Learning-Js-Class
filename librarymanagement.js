@@ -3,13 +3,18 @@
         this.title = title;
         this.author = author;
         this.isbn = isbn;
+        this._isAvailable = true;
       }
       getInfo(){
-          return`Title:${this.title}, Author: ${this.author}, ISBN: ${this.isbn}`
+          return `Title:${this.title}, Author: ${this.author}, ISBN: ${this.isbn}`
       }
       
       get isAvailable(){
-          return true;
+          return this._isAvailable;
+      }
+      
+      set isAvailable(value){
+          this._isAvailable = value;
       }
   }
 
@@ -78,10 +83,14 @@ class Member {
         this.memberId = memberId;
         this.borrowedBooks = [];
     }
+
+    getMaxBooks(){
+        return 3;
+    }
     
     borrowBook(library, isbn) {
         const book = library.findBook(isbn);
-        if(book && this.borrowedBooks.length < 3) {
+        if(book && this.borrowedBooks.length < this.getMaxBooks()){
             this.borrowedBooks.push(book);
             library.removeBook(isbn);
             return true;
@@ -130,12 +139,15 @@ class PremiumMember extends Member{
     }
     borrowBook(library,isbn){
         const book = library.findBook(isbn);
-        if(book && this.borrowedBooks.length < 5) {
+        if(book && this.borrowedBooks.length < this.getMaxBooks()) {
             this.borrowedBooks.push(book);
             library.removeBook(isbn);
             return true;
         }
         return false;
+    }
+    getMaxBooks(){
+        return 5;
     }
     static getMaxBooks(){
         return 5;
